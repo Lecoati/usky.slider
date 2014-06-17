@@ -1,0 +1,22 @@
+{      
+    propertyEditors: [      
+        {
+            alias: "uSky.Slider",
+            name: "uSky Slider",
+            editor: {
+                view: "~/App_Plugins/Lecoati.uSky.Slider/uSky.Slider.html",
+				hideLabel: true,
+				valueType: "JSON"
+            }
+        }
+    ]
+    ,
+    javascript: [
+
+		'~/App_Plugins/Lecoati.uSky.Slider/lib/tinycolor.js',
+		'~/App_Plugins/Lecoati.uSky.Slider/lib/colorpicker.js',
+		'~/App_Plugins/Lecoati.uSky.Slider/lib/draggable.js',
+		'~/App_Plugins/Lecoati.uSky.Slider/lib/resizableSlide.js',
+        '~/App_Plugins/Lecoati.uSky.Slider/uSky.Slider.controller.js'
+    ]
+}
