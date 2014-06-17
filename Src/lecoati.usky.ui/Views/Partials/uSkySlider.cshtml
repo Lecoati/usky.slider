@@ -1,0 +1,74 @@
+@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{
+
+    int height = 550;
+    int width = 1140;
+
+    dynamic slider = @Model.Content.GetPropertyValue("slider");
+    var sliderHeight = !string.IsNullOrEmpty(slider.height.Value.ToString()) ? slider.height.Value : height;
+    var sliderWidth = !string.IsNullOrEmpty(slider.width.Value.ToString()) ? slider.width.Value : width;
+    
+}
+
+<div class="tp-banner-container">
+    <div class="tp-banner">
+        <ul>
+
+            @foreach (var index in slider.slides)
+            {
+                <li @( !string.IsNullOrEmpty(index.dataTransition.ToString()) ? "data-transition=" + index.dataTransition : "")
+                    @( !string.IsNullOrEmpty(index.dataSlotamount.ToString()) ? "data-slotamount=" + index.dataSlotamount : "")
+                    @( !string.IsNullOrEmpty(index.dataDelay.ToString()) ? "data-delay=" + index.dataDelay : "")
+                    @( !string.IsNullOrEmpty(index.dataMasterspeed.ToString()) ? "data-masterspeed=" + index.dataMasterspeed : "")>
+
+                    <img src="@(!string.IsNullOrEmpty(index.mediaSrc.ToString()) ? index.mediaSrc : "/App_Plugins/Lecoati.uSky.Slider/assets/transparent.png")"
+                         style="background-color: @index.backgroundColor"
+                         data-bgfit="cover"
+                         data-bgposition="left top"
+                         data-bgrepeat="no-repeat">
+
+                    @foreach (var layer in index.layers)
+                    {
+
+                        var padding = !string.IsNullOrEmpty(layer.padding.ToString()) ? layer.padding + "px" : "0px";
+                        var fontSize = !string.IsNullOrEmpty(layer.fontSize.ToString()) ? layer.fontSize + "px" : "0px";
+                        var lineHeight = !string.IsNullOrEmpty(layer.fontSize.ToString()) ? layer.fontSize + "px" : "0px";
+
+                        <div class="tp-caption @layer.animationClass"
+                             data-x="@(layer.dataX )"
+                             data-y="@(layer.dataY )"
+                             data-speed="@layer.dataSpeed"
+                             data-start="@layer.dataStart"
+                             data-easing="@layer.dataEasing"
+                             style="z-index: 4; background-color: @layer.backgroundColor; color: @layer.color; @layer.customCss; padding: @padding; font-size: @fontSize; line-height: @lineHeight">
+
+                            @if (layer.type == "text")
+                            {
+                                @Html.Raw(layer.content)
+                            }
+                            @if (layer.type == "image")
+                            {
+                                <img src="@Html.Raw(layer.content)" width="@((layer.width) + "px")">
+                            }
+
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery('.tp-banner').revolution(
+         {
+             delay: 9000,
+             @( width > 0 ? "startwidth: " + sliderWidth + "," : "")
+             @( height > 0 ? "startheight: " + sliderHeight + "," : "")
+             hideThumbs: 10,
+             
+         });
+    });
+</script>

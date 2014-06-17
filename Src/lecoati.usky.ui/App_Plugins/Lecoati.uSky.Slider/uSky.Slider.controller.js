@@ -97,8 +97,8 @@ angular.module("umbraco")
                 mediaSrc: '',
                 mediaThumbnail: '',
                 backgroundColor: '',
-                previousParentWidth: $scope.fluidWidth,
-                previousParentHeight: $scope.fluidHeight,
+                //previousParentWidth: $scope.fluidWidth,
+                //previousParentHeight: $scope.fluidHeight,
                 layers: []
             });
         }
@@ -198,10 +198,10 @@ angular.module("umbraco")
                 width: "",
                 height: "",
                 color: "#fff",
-                fontSize: $scope.fluidWidth * 0.033,
+                fontSize: 18,
                 fontStyle: "",
                 backgroundColor: "#333",
-                padding: $scope.fluidWidth * 0.012,
+                padding: 10,
                 customCss: "",
                 //dataEndspeed: "0",
                 //dataEndeasing: "0",
@@ -237,7 +237,7 @@ angular.module("umbraco")
                             dataSpeed: "1000",
                             dataStart: "800",
                             dataEasing: "",
-                            width: $scope.fluidWidth * 0.33,
+                            width: 200,
                             height: "",
                             color: "",
                             fontSize: "",
