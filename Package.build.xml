@@ -45,7 +45,7 @@
   <!-- PREPAIRE FILES  -->
   <Target Name="PrepairFiles" DependsOnTargets="Compile">
     <ItemGroup>
-      <App_Plugins Include="$(RootDir)\Src\lecoati.usky.ui\App_Plugins\Lecoati.uSky.Slider\*.*" />
+      <App_Plugins Include="$(RootDir)\Src\lecoati.usky.ui\App_Plugins\Lecoati.uSky.Slider\**\*.*" />
       <Views Include="$(RootDir)\Src\lecoati.usky.ui\Views\Partials\uSkySlider.cshtml" />
       <PackageFile Include="$(RootDir)\Package.xml" />
     </ItemGroup>
