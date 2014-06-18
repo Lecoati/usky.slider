@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Package">
+
+  <!-- 
+  	****************************************
+  	* IMPORTS
+	****************************************
+  -->
+  <Import Project="$(MSBuildProjectDirectory)\Lib\MSBuildUmbracoTasks\MSBuild.Umbraco.Tasks.Targets" />
+
+  <!-- 
+  	****************************************
+  	* PROPERTIES
+	****************************************
+  -->
+  <PropertyGroup>
+    <PackageVersion>0.9.0</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootDir>$(MSBuildProjectDirectory)</RootDir>
+    <BuildDir>$(RootDir)\Build</BuildDir>
+    <PackageDir>$(RootDir)\UmbPackages</PackageDir>
+  </PropertyGroup>
+
+  <!-- 
+  	****************************************
+  	* TARGETS
+	****************************************
+  -->
+
+  <!-- CLEAN -->
+  <Target Name="Clean">
+    <RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />
+    <RemoveDir Directories="$(PackageDir)" Condition="Exists('$(PackageDir)')" />
+    <MakeDir Directories="$(BuildDir)" />
+    <MakeDir Directories="$(PackageDir)" />
+  </Target>
+
+  <!-- COMPILE -->
+  <Target Name="Compile" DependsOnTargets="Clean">
+    <MSBuild Projects="uSky.Slider.sln" />
+  </Target>
+
+  <!-- PREPAIRE FILES  -->
+  <Target Name="PrepairFiles" DependsOnTargets="Compile">
+    <ItemGroup>
+      <App_Plugins Include="$(RootDir)\Src\lecoati.usky.ui\App_Plugins\Lecoati.uSky.Slider\*.*" />
+      <Views Include="$(RootDir)\Src\lecoati.usky.ui\Views\Partials\uSkySlider.cshtml" />
+      <PackageFile Include="$(RootDir)\Package.xml" />
+    </ItemGroup>
+    <Copy SourceFiles="@(App_Plugins)" DestinationFolder="$(BuildDir)\App_Plugins\Lecoati.uSky.Slider\%(RecursiveDir)" />
+    <Copy SourceFiles="@(Views)" DestinationFolder="$(BuildDir)\Views\Partials\%(RecursiveDir)" />
+    <Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildDir)" />
+  </Target>
+
+  <!-- MANIFEST -->
+  <Target Name="Manifest" DependsOnTargets="PrepairFiles">
+    <ItemGroup>
+      <ManifestFiles Include="$(BuildDir)\**\*" Exclude="$(BuildDir)\Package.xml" />
+    </ItemGroup>
+    <ReadLinesFromFile File="$(RootDir)\Readme.txt">
+      <Output TaskParameter="Lines" ItemName="Readme" />
+    </ReadLinesFromFile>
+    <ManifestUpdate ManifestFile="$(BuildDir)\Package.xml"
+      WorkingDirectory="$(BuildDir)"
+      PackageVersion="$(PackageVersion)"
+      Readme="@(Readme->'%(Identity)', '%0a%0d')"
+        Files="@(ManifestFiles)" />
+  </Target>
+
+  <!-- PACKAGE -->
+  <Target Name="Package" DependsOnTargets="Manifest">
+    <ItemGroup>
+      <PackageFiles Include="$(BuildDir)\**\*.*" />
+    </ItemGroup>
+    <Package ManifestFile="$(BuildDir)\Package.xml"
+         WorkingDirectory="$(BuildDir)"
+         OutputDirectory="$(PackageDir)"
+         Files="@(PackageFiles)" />
+  </Target>
+
+</Project>

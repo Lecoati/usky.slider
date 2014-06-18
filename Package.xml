@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<umbPackage>
+  <files>
+  </files>
+  <info>
+    <package>
+      <name>uSky.Slider</name>
+      <version>0.9.0</version>
+      <license url="http://opensource.org/licenses/MIT">MIT License</license>
+      <url>http://www.lecoati.com/</url>
+      <requirements>
+        <major>3</major>
+        <minor>0</minor>
+        <patch>0</patch>
+      </requirements>
+    </package>
+    <author>
+      <name>LECOATI</name>
+      <website>http://www.lecoati.com/</website>
+    </author>
+    <readme><![CDATA[]]></readme>
+  </info>
+  <DocumentTypes />
+  <Templates />
+  <Stylesheets />
+  <Macros />
+  <DictionaryItems />
+  <Languages />
+  <DataTypes />
+</umbPackage>
