@@ -80,6 +80,8 @@ angular.module("umbraco")
         //$scope.selectedLayerIndex = -1;
         $scope.currentSlide;
 
+        if (!$scope.model.config.mediaStartNode)
+            $scope.model.config.mediaStartNode = -1;
 
         /********************************************************************************************/
         /* Slide managment */
@@ -146,6 +148,7 @@ angular.module("umbraco")
         $scope.addMedia = function (slide) {
             dialogService.mediaPicker({
                 multiPicker: false,
+                startNodeId : $scope.model.config.mediaStartNode,
                 callback: function (data) {
 
                     //it's only a single selector, so make it into an array
