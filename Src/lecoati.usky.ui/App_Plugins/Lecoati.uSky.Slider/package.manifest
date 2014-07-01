@@ -7,7 +7,41 @@
                 view: "~/App_Plugins/Lecoati.uSky.Slider/uSky.Slider.html",
 				hideLabel: true,
 				valueType: "JSON"
-            }
+            },
+			prevalues: {
+				fields:[
+					{
+					   label: "Slider Width",
+					   description: "default 1140px",
+					   key: "width",
+					   view: "number"
+					},
+					{
+					   label: "Slider Height",
+					   description: "default 550px",
+					   key: "height",
+					   view: "number"
+					} ,
+					{
+					   label: "Slider Editor Width",
+					   description: "default 1140px",
+					   key: "editorWidth",
+					   view: "number"
+					},
+					{
+					   label: "Slider Editor Height",
+					   description: "default 550px",
+					   key: "editorHeight",
+					   view: "number"
+					},
+					{
+					   label: "Image Full Width",
+					   description: "Background image full width in editor",
+					   key: "imageFullWidth",
+					   view: "boolean"
+					}                   
+				]
+			}
         }
     ]
     ,

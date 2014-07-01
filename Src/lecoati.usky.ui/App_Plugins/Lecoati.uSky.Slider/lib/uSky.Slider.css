@@ -161,6 +161,9 @@
         overflow: hidden;
         width:1140px;
         display: inline-block;
+
+        text-align: left;
+        position: relative;
     }
 
     .slider-revolution .layer-show {
@@ -168,7 +171,7 @@
         overflow:hidden;
         box-sizing: border-box;
         width: 100%;
-        padding-top: 48.24561403508772%;
+        /*padding-top: 48.24561403508772%;*/
         height:550px;
     }
 

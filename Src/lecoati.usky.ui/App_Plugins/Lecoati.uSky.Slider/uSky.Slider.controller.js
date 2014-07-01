@@ -103,6 +103,13 @@ angular.module("umbraco")
             });
         }
 
+        /* duplicate slide */
+        $scope.duplicateSlide = function (slide, $index) {
+            $scope.model.value.slides.splice($index + 1, 0,
+                angular.copy(slide)
+            );
+        }
+
         /* edit the current slide */
         $scope.editSlide = function (slide) {
             $scope.currentSlide = slide;
@@ -147,13 +154,10 @@ angular.module("umbraco")
                     }
 
                     _.each(data, function (media, i) {
-                        media.src = imageHelper.getImagePropertyValue({ imageModel: media });
-                        media.thumbnail = imageHelper.getThumbnailFromPath(media.src);
-
+                        media.thumbnail = imageHelper.getThumbnailFromPath(media.image);
                         slide.mediaId = media.id;
-                        slide.mediaSrc = media.src;
+                        slide.mediaSrc = media.image;
                         slide.mediaThumbnail = media.thumbnail;
-
                     });
 
                 }
@@ -197,10 +201,10 @@ angular.module("umbraco")
                 dataEasing: "",
                 width: "",
                 height: "",
-                color: "#fff",
-                fontSize: 18,
+                color: "#333",
+                fontSize: 26,
                 fontStyle: "",
-                backgroundColor: "#333",
+                backgroundColor: "",
                 padding: 10,
                 customCss: "",
                 //dataEndspeed: "0",
@@ -222,14 +226,12 @@ angular.module("umbraco")
                     }
 
                     _.each(data, function (media, i) {
-                        media.src = imageHelper.getImagePropertyValue({ imageModel: media });
-                        media.thumbnail = imageHelper.getThumbnailFromPath(media.src);
 
+                        media.thumbnail = imageHelper.getThumbnailFromPath(media.image);
                         if ($scope.currentSlide.layers == undefined) { $scope.currentSlide.layers = []; }
-
                         $scope.currentSlide.layers.splice($scope.currentSlide.layers.length + 1, 0, {
                             name: "Image " + ($scope.currentSlide.layers.length + 1),
-                            content: media.src,
+                            content: media.image,
                             type: "image",
                             animationClass: { value: "sft", alias: "ShortfromTop" },
                             dataX: "0",
@@ -256,6 +258,49 @@ angular.module("umbraco")
             });
         }
 
+        $scope.setSliderStyle = function () {
+            if ($scope.model.value && $scope.currentSlide) {
+                return {
+                    'background-color': $scope.currentSlide.backgroundColor,
+                    'background-image': 'url(' + $scope.currentSlide.mediaSrc + ')',
+                    'height': $scope.model.value.editorHeight + 'px',
+                    'background-size':  $scope.model.config.imageFullWidth == 0 ? 'cover' : '100%',
+                    'background-position': 'top center'
+                }
+            }
+        };
+
+        $scope.setSliderHeight = function () {
+            if ($scope.model.value && $scope.currentSlide) {
+                return {
+                    'width': $scope.model.value.editorWidth + 'px'
+                }
+            }
+        };
+
+        $scope.setLayerStyle = function (layer) {
+            if (layer) {
+                return {
+                    'top': layer.dataY,
+                    'left': layer.dataX,
+                    'width': layer.width + 'px',
+                    'height': layer.height + 'px'
+                }
+            }
+        };
+
+        $scope.setLayerStyleInto = function (layer) {
+            if (layer) {
+                return {
+                    'background-color': layer.backgroundColor,
+                    'font-size': layer.fontSize + 'px',
+                    'line-height': layer.fontSize + 'px',
+                    'color': layer.color,
+                    'padding': layer.padding + 'px'
+                }
+            }
+        };
+
         /********************************************************************************************/
         /* General */
         /********************************************************************************************/
@@ -270,14 +315,26 @@ angular.module("umbraco")
             }
         };
 
-        if (!$scope.model.value || $scope.model.value == '') {
+        var width = $scope.model.config.width ? $scope.model.config.width : 1140;
+        var height = $scope.model.config.height ? $scope.model.config.height : 550;
+        var editorWidth = $scope.model.config.editorWidth ? $scope.model.config.editorWidth : 1140;
+        var editorHeight = $scope.model.config.editorHeight ? $scope.model.config.editorHeight : 550;
 
+        if (!$scope.model.value ||
+            $scope.model.value == '') {
             $scope.model.value = {
-                width:'',
-                height:'',
+                width: width,
+                height: height,
+                editorWidth: editorWidth,
+                editorHeight: editorHeight,
                 slides: []
             }
-
+        }
+        else {
+            $scope.model.value.width = width,
+            $scope.model.value.height = height,
+            $scope.model.value.editorWidth = editorWidth,
+            $scope.model.value.editorHeight = editorHeight
         }
 
         var unsubscribe = $scope.$on("formSubmitting", function () {

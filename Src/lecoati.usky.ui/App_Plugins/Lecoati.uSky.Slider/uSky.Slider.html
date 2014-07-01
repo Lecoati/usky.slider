@@ -9,6 +9,7 @@
                 <i class="icon icon-delete slide-delete medium" ng-click="removeSlide($index)"></i>
                 <i class="icon icon-list slide-delete medium" ng-click="editSlide(slide)"></i>
                 <i class="icon icon-navigation slide-delete slide-move medium"></i>
+                <i class="icon icon-documents slide-delete medium" ng-click="duplicateSlide(slide, $index)"></i>
 
                 <div class="preview">
                     <div class="image-preview" style="background-color:{{ slide.backgroundColor }}; background-image: url({{ slide.mediaThumbnail; }})">
@@ -63,8 +64,6 @@
         <i class="icon icon-add slide-add large" ng-click="addSlide()"></i>
         <br />
         <div class="help-text"><span ng-click="addSlide()">Add</span> a new slide</div>
-        <br />
-        <div class="help-text" style="display:none">Slider size: width: <input type="text" value="1140" ng-model="model.value.width" />px * height: <input type="text" value="550" ng-model="model.value.height" />px</div> 
 
     </div>
 
@@ -74,10 +73,10 @@
             <i class="icon icon-arrow-left medium" ng-click="closeEditSlide()"></i>
         </div>
 
-        <div class="layer-panel-editor" style="width:{{ model.value.width }}px">
+        <div class="layer-panel-editor" ng-style="setSliderHeight()">
 
-            <div resizable-slide id="slideFluid" class="layer-show" style="background-color:{{ currentSlide.backgroundColor; }}; background-image: url({{ currentSlide.mediaSrc; }}); height: {{ model.value.height; }}px">
-                
+            <div resizable-slide id="slideFluid" class="layer-show" ng-style="setSliderStyle()">
+
                 <div class="slider-revolution-layer"
                      draggable
                      ng-class="{ selected: layer == $parent.currentLayer , hover: layer == $parent.overLayer }"
@@ -88,12 +87,13 @@
                      data-ng-mouseleave="initOverLayer()"
                      ng-repeat="layer in currentSlide.layers"
                      layer="layer"
-                     style="top: {{ layer.dataY }}px; left: {{ layer.dataX }}px; width: {{ layer.width }}px; height: {{ layer.height; }}px;">
+                     ng-style="$parent.setLayerStyle(layer)">
 
                     <div data-ng-click="handlerClick()"
                          data-ng-mouseover="handlerMouseOver()"
                          data-ng-mouseleave="handlerMouseLeave()"
-                         style="background-color:{{ layer.backgroundColor }};font-size: {{ layer.fontSize }}px; line-height:{{ layer.fontSize; }}px; color: {{ layer.color }}; padding: {{ layer.padding }}px; {{ layer.customCss; }}">
+                         ng-style="$parent.setLayerStyleInto(layer)"
+                         style="{{ layer.customCss }}">
                         <div ng-hide="layer.type!='text'" ng-bind-html-unsafe="layer.content"></div>
                         <img ng-hide="layer.type!='image'" class="layer-img" ng-src="{{layer.content}}" />
                     </div>
