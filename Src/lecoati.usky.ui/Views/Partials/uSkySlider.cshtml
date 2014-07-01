@@ -5,7 +5,7 @@
     int height = 550;
     int width = 1140;
 
-    dynamic slider = @Model.Content.GetPropertyValue("slider");
+    var slider = CurrentPage.slider;
     var sliderHeight = !string.IsNullOrEmpty(slider.height.Value.ToString()) ? slider.height.Value : height;
     var sliderWidth = !string.IsNullOrEmpty(slider.width.Value.ToString()) ? slider.width.Value : width;
     
