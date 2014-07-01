@@ -39,7 +39,13 @@
 					   description: "Background image full width in editor",
 					   key: "imageFullWidth",
 					   view: "boolean"
-					}                   
+					},
+					{
+    					label: "Media start node",
+    					description: "Choose the media start node",
+    					key: "mediaStartNode",
+    					view: "mediapicker"
+    				}                   
 				]
 			}
         }
