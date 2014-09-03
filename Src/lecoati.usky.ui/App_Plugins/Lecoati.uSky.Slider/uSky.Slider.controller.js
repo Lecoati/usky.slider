@@ -261,6 +261,22 @@ angular.module("umbraco")
             });
         }
 
+        $scope.addMovieLayer = function () {
+
+            dialogService.embedDialog({
+                callback: function (data) {
+                    if ($scope.currentSlide.layers == undefined) { $scope.currentSlide.layers = []; }
+                    $scope.currentSlide.layers.splice($scope.currentSlide.layers.length + 1, 0, {
+                        name: "Embed " + ($scope.currentSlide.layers.length + 1),
+                        content: data,
+                        type: "embed",
+                    });
+                    $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length - 1];
+                }
+            });
+
+        };
+
         $scope.setSliderStyle = function () {
             if ($scope.model.value && $scope.currentSlide) {
                 return {

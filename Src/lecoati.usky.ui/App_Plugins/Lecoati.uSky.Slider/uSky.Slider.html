@@ -75,7 +75,7 @@
 
         <div class="layer-panel-editor" ng-style="setSliderHeight()">
 
-            <div resizable-slide id="slideFluid" class="layer-show" ng-style="setSliderStyle()">
+            <div id="slideFluid" class="layer-show" ng-style="setSliderStyle()">
 
                 <div class="slider-revolution-layer"
                      draggable
@@ -94,8 +94,11 @@
                          data-ng-mouseleave="handlerMouseLeave()"
                          ng-style="$parent.setLayerStyleInto(layer)"
                          style="{{ layer.customCss }}">
-                        <div ng-hide="layer.type!='text'" ng-bind-html-unsafe="layer.content"></div>
-                        <img ng-hide="layer.type!='image'" class="layer-img" ng-src="{{layer.content}}" />
+                        
+                        <div ng-if="layer.type=='text'" ng-bind-html-unsafe="layer.content"></div>
+                        <img ng-if="layer.type=='image'" class="layer-img" ng-src="{{layer.content}}" />
+                        <div ng-if="layer.type=='embed'" ng-bind-html-unsafe="layer.content"></div>
+
                     </div>
 
                 </div>
@@ -210,7 +213,7 @@
                     <br />
                     <i class="icon icon-picture medium" ng-click="addPictureLayer()"></i>
                     <i class="icon icon-font medium" ng-click="addTextLayer()"></i>
-                    <!--<i class="icon icon-movie medium" ng-click="addMovieLayer()"></i>-->
+                    <i class="icon icon-movie medium" ng-click="addMovieLayer()"></i>
                     <br />
                     <div class="help-text dark">Add new layer</div>
 

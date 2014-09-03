@@ -1,4 +1,4 @@
-uSky.Slider
+﻿uSky.Slider
 =========== 
 
 uSky.Slider is a simple slider editor for Umbraco, based on the famous jQuery plugin Slider Revolution http://codecanyon.net/item/slider-revolution-responsive-jquery-plugin/2580848.
@@ -25,6 +25,7 @@ The jQuery Slider Revolution plugin is needed to display the slider on the page.
 <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
 <script type="text/javascript" src="/rs-plugin/js/jquery.themepunch.plugins.min.js"></script>
 <script type="text/javascript" src="/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+<script type="text/javascript" src="/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
 
 <!-- SLIDER REVOLUTION 4.x CSS SETTINGS -->
 <link rel="stylesheet" type="text/css" href="/rs-plugin/css/settings.css" media="screen" />
