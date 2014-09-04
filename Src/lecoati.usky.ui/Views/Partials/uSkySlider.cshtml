@@ -8,7 +8,7 @@
     var editorWidth = ConvertToDecimal(slider.editorWidth.Value, width);
     var editorHeight = ConvertToDecimal(slider.editorHeight.Value, height);
 
-    var withFactor = width / editorWidth;
+    var widthFactor = width / editorWidth;
     var heightFactor = height / editorHeight;
 }
 
@@ -34,13 +34,13 @@
                     @foreach (var layer in index.layers)
                     {
 
-                        var datax = ConvertToDecimal(layer.dataX, 0m) * withFactor;
-                        var datay = ConvertToDecimal(layer.dataY, 0m) * withFactor;
-                        var padding = (ConvertToDecimal(layer.padding, 0m) * withFactor) + "px";
-                        var fontSize = (ConvertToDecimal(layer.fontSize, 0m) * withFactor) + "px";
-                        var lineHeight = (ConvertToDecimal(layer.fontSize, 0m) * withFactor) + "px";
+                        var datax = ConvertToDecimal(layer.dataX, 0m) * widthFactor;
+                        var datay = ConvertToDecimal(layer.dataY, 0m) * widthFactor;
+                        var padding = (ConvertToDecimal(layer.padding, 0m) * widthFactor) + "px";
+                        var fontSize = (ConvertToDecimal(layer.fontSize, 0m) * widthFactor) + "px";
+                        var lineHeight = (ConvertToDecimal(layer.fontSize, 0m) * widthFactor) + "px";
 
-                        var layerwidth = Math.Round(ConvertToDecimal(layer.width, 0m) * withFactor) + "px";
+                        var layerwidth = Math.Round(ConvertToDecimal(layer.width, 0m) * widthFactor) + "px";
 
                         var layerStyle = new System.Text.StringBuilder();
                         layerStyle.Append("z-index: 4;");
