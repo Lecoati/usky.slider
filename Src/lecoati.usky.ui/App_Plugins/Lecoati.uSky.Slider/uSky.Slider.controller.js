@@ -1,3 +1,25 @@
+angular.module("umbraco").directive('ngFocus', ['$parse', function ($parse) {
+    return function (scope, element, attr) {
+        var fn = $parse(attr['ngFocus']);
+        element.bind('focus', function (event) {
+            scope.$apply(function () {
+                fn(scope, { $event: event });
+            });
+        });
+    }
+}]);
+
+angular.module("umbraco").directive('ngBlur', ['$parse', function ($parse) {
+    return function (scope, element, attr) {
+        var fn = $parse(attr['ngBlur']);
+        element.bind('blur', function (event) {
+            scope.$apply(function () {
+                fn(scope, { $event: event });
+            });
+        });
+    }
+}]);
+
 angular.module("umbraco")
     .controller("uSky.Slider.controller",
     function ($scope, $http, assetsService, $rootScope, dialogService, mediaResource, imageHelper, $timeout, $window) {
@@ -188,7 +210,29 @@ angular.module("umbraco")
 
         $scope.removeLayer = function (index) {
             $scope.currentSlide.layers.splice(index, 1);
-        }
+        };
+
+        $scope.fixFontUrl = function(url) {
+            url = url.split(" ").join("+");
+            return url;
+        };
+
+        $scope.loadGoogleFont = function (currentLayer) {
+            console.info('attempting to load Google font ' + currentLayer.fontName);
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                      '://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+
+            WebFontConfig = {
+                google: {
+                    families: [currentLayer.fontName]
+                }
+            }
+        };
 
         $scope.addTextLayer = function () {
             if ($scope.currentSlide.layers == undefined) { $scope.currentSlide.layers = []; }
@@ -207,6 +251,7 @@ angular.module("umbraco")
                 color: "#333",
                 fontSize: 26,
                 fontStyle: "",
+                fontName: "Open Sans",
                 backgroundColor: "",
                 padding: 10,
                 customCss: "",
@@ -215,7 +260,8 @@ angular.module("umbraco")
                 //dataEndspeed: "0",
                 //dataCaptionhidden: "0"
             });
-            $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length -1];
+            $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length - 1];
+            $scope.loadGoogleFont($scope.currentLayer);
         }
 
         $scope.addPictureLayer = function () {
@@ -247,6 +293,7 @@ angular.module("umbraco")
                             color: "",
                             fontSize: "",
                             fontStyle: "",
+                            fontName: "",
                             padding: "",
                             customCss: ""
                             //dataEndspeed: "0",
@@ -313,6 +360,7 @@ angular.module("umbraco")
                 return {
                     'background-color': layer.backgroundColor,
                     'font-size': layer.fontSize + 'px',
+                    'font-family': layer.fontName,
                     'line-height': layer.fontSize + 'px',
                     'color': layer.color,
                     'padding': layer.padding + 'px'
