@@ -144,7 +144,7 @@ angular.module("umbraco")
             else {
                 $scope.currentLayer = undefined;
             }
-
+            $scope.loadGoogleFont($scope.currentSlide);
         }
 
         /* remove slide */
@@ -212,13 +212,7 @@ angular.module("umbraco")
             $scope.currentSlide.layers.splice(index, 1);
         };
 
-        $scope.fixFontUrl = function(url) {
-            url = url.split(" ").join("+");
-            return url;
-        };
-
-        $scope.loadGoogleFont = function (currentLayer) {
-            console.info('attempting to load Google font ' + currentLayer.fontName);
+        $scope.loadGoogleFont = function (slide) {
             var wf = document.createElement('script');
             wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
                       '://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js';
@@ -226,12 +220,23 @@ angular.module("umbraco")
             wf.async = 'true';
             var s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(wf, s);
-
             WebFontConfig = {
                 google: {
-                    families: [currentLayer.fontName]
+                    families: []
+                }
+            };
+            if (slide.layers) {
+                if (slide.layers.length > 0) {
+                    $scope.updateGoogleFont(slide);
                 }
             }
+        };
+
+        $scope.updateGoogleFont = function (slide) {
+            var families = _.map(slide.layers, function (layer) {
+                return layer.fontName;
+            });
+            WebFontConfig.google.families = families;
         };
 
         $scope.addTextLayer = function () {
@@ -261,7 +266,6 @@ angular.module("umbraco")
                 //dataCaptionhidden: "0"
             });
             $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length - 1];
-            $scope.loadGoogleFont($scope.currentLayer);
         }
 
         $scope.addPictureLayer = function () {
@@ -360,7 +364,7 @@ angular.module("umbraco")
                 return {
                     'background-color': layer.backgroundColor,
                     'font-size': layer.fontSize + 'px',
-                    'font-family': layer.fontName,
+                    'font-family': "'" + layer.fontName + "'",
                     'line-height': layer.fontSize + 'px',
                     'color': layer.color,
                     'padding': layer.padding + 'px'
