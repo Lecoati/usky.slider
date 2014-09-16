@@ -1,3 +1,25 @@
+angular.module("umbraco").directive('ngFocus', ['$parse', function ($parse) {
+    return function (scope, element, attr) {
+        var fn = $parse(attr['ngFocus']);
+        element.bind('focus', function (event) {
+            scope.$apply(function () {
+                fn(scope, { $event: event });
+            });
+        });
+    }
+}]);
+
+angular.module("umbraco").directive('ngBlur', ['$parse', function ($parse) {
+    return function (scope, element, attr) {
+        var fn = $parse(attr['ngBlur']);
+        element.bind('blur', function (event) {
+            scope.$apply(function () {
+                fn(scope, { $event: event });
+            });
+        });
+    }
+}]);
+
 angular.module("umbraco")
     .controller("uSky.Slider.controller",
     function ($scope, $http, assetsService, $rootScope, dialogService, mediaResource, imageHelper, $timeout, $window) {
@@ -122,7 +144,7 @@ angular.module("umbraco")
             else {
                 $scope.currentLayer = undefined;
             }
-
+            $scope.loadGoogleFont($scope.currentSlide);
         }
 
         /* remove slide */
@@ -188,7 +210,34 @@ angular.module("umbraco")
 
         $scope.removeLayer = function (index) {
             $scope.currentSlide.layers.splice(index, 1);
-        }
+        };
+
+        $scope.loadGoogleFont = function (slide) {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                      '://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+            WebFontConfig = {
+                google: {
+                    families: []
+                }
+            };
+            if (slide.layers) {
+                if (slide.layers.length > 0) {
+                    $scope.updateGoogleFont(slide);
+                }
+            }
+        };
+
+        $scope.updateGoogleFont = function (slide) {
+            var families = _.map(slide.layers, function (layer) {
+                return layer.fontName;
+            });
+            WebFontConfig.google.families = families;
+        };
 
         $scope.addTextLayer = function () {
             if ($scope.currentSlide.layers == undefined) { $scope.currentSlide.layers = []; }
@@ -207,6 +256,7 @@ angular.module("umbraco")
                 color: "#333",
                 fontSize: 26,
                 fontStyle: "",
+                fontName: "Open Sans",
                 backgroundColor: "",
                 padding: 10,
                 customCss: "",
@@ -215,7 +265,7 @@ angular.module("umbraco")
                 //dataEndspeed: "0",
                 //dataCaptionhidden: "0"
             });
-            $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length -1];
+            $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length - 1];
         }
 
         $scope.addPictureLayer = function () {
@@ -247,6 +297,7 @@ angular.module("umbraco")
                             color: "",
                             fontSize: "",
                             fontStyle: "",
+                            fontName: "",
                             padding: "",
                             customCss: ""
                             //dataEndspeed: "0",
@@ -313,6 +364,7 @@ angular.module("umbraco")
                 return {
                     'background-color': layer.backgroundColor,
                     'font-size': layer.fontSize + 'px',
+                    'font-family': "'" + layer.fontName + "'",
                     'line-height': layer.fontSize + 'px',
                     'color': layer.color,
                     'padding': layer.padding + 'px'

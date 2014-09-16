@@ -94,7 +94,7 @@
                          data-ng-mouseleave="handlerMouseLeave()"
                          ng-style="$parent.setLayerStyleInto(layer)"
                          style="{{ layer.customCss }}">
-                        
+
                         <div ng-if="layer.type=='text'" ng-bind-html-unsafe="layer.content"></div>
                         <img ng-if="layer.type=='image'" class="layer-img" ng-src="{{layer.content}}" />
                         <div ng-if="layer.type=='embed'" ng-bind-html-unsafe="layer.content"></div>
@@ -121,6 +121,11 @@
                         <div class="property">
                             <label>padding:</label>
                             <input class="small-input" ng-model="currentLayer.padding" type="text" />
+                        </div>
+
+                        <div class="property">
+                            <label>Google Font Name:</label>
+                            <input class="small-input" ng-model="currentLayer.fontName" type="text" ng-blur="loadGoogleFont(currentSlide)" />
                         </div>
 
                         <div class="property">

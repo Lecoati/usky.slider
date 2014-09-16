@@ -24,7 +24,7 @@
                 <li @( !string.IsNullOrEmpty(index.dataTransition.ToString()) ? "data-transition=" + index.dataTransition : "")
                     @( !string.IsNullOrEmpty(index.dataSlotamount.ToString()) ? "data-slotamount=" + index.dataSlotamount : "")
                     @( !string.IsNullOrEmpty(index.dataDelay.ToString()) ? "data-delay=" + index.dataDelay : "")
-                    @( !string.IsNullOrEmpty(index.dataMasterspeed.ToString()) ? "data-masterspeed=" + index.dataMasterspeed : "")>
+                    @( !string.IsNullOrEmpty(index.dataMasterspeed.ToString()) ? "data-masterspeed=" + index.dataMasterspeed : "") style="width: 1900px;">
 
                     <img src="@(!string.IsNullOrEmpty(index.mediaSrc.ToString()) ? index.mediaSrc : "/App_Plugins/Lecoati.uSky.Slider/assets/transparent.png")"
                          style="background-color: @index.backgroundColor"
@@ -39,6 +39,7 @@
                         var datay = layer.dataY != null && !string.IsNullOrEmpty(layer.dataY.ToString()) ? (decimal.Parse(layer.dataY.ToString()) * withFactor).ToString() : "0";
                         var padding = layer.padding != null && !string.IsNullOrEmpty(layer.padding.ToString()) ? (decimal.Parse(layer.padding.ToString()) * withFactor).ToString() + "px" : "0px";
                         var fontSize = layer.fontSize != null && !string.IsNullOrEmpty(layer.fontSize.ToString()) ? (decimal.Parse(layer.fontSize.ToString()) * withFactor).ToString() + "px" : "0px";
+                        var fontName = layer.fontName != null && !string.IsNullOrEmpty(layer.fontName.ToString()) ? layer.fontName.ToString() : "Noto Sans";
                         var lineHeight = layer.fontSize != null && !string.IsNullOrEmpty(layer.fontSize.ToString()) ? (decimal.Parse(layer.fontSize.ToString()) * withFactor).ToString() + "px" : "0px";
                         var layerwidth = layer.width != null && !string.IsNullOrEmpty(layer.width.ToString()) ? (decimal.Parse(layer.width.ToString()) * withFactor).ToString() + "px" : "0px";
 
@@ -48,7 +49,7 @@
                              data-speed="@layer.dataSpeed"
                              data-start="@layer.dataStart"
                              data-easing="@layer.dataEasing"
-                             style="z-index: 4; background-color: @layer.backgroundColor; color: @layer.color; @layer.customCss; padding: @padding; font-size: @fontSize; line-height: @lineHeight">
+                             style="z-index: 4; background-color: @layer.backgroundColor; color: @layer.color; @layer.customCss; padding: @padding; font-family: @fontName; font-size: @fontSize; line-height: @lineHeight">
 
                             @if (layer.type == "text")
                             {
@@ -71,7 +72,14 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script src="//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+<script>
+    WebFont.load({
+        google: {
+            families: [@LoadFonts(slider)]
+        }
+    });
+
     jQuery(document).ready(function () {
         jQuery('.tp-banner').revolution(
          {
@@ -82,3 +90,14 @@
          });
     });
 </script>
+
+@helper LoadFonts(dynamic slider)
+{
+    foreach (var index in slider.slides)
+    {
+        foreach (var layer in index.layers)
+        {
+            @MvcHtmlString.Create(string.Format("'{0}',", @layer.fontName))
+        }
+    }
+}
