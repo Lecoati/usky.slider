@@ -95,10 +95,11 @@
                          ng-style="$parent.setLayerStyleInto(layer)"
                          style="{{ layer.customCss }}">
 
-                        <div ng-if="layer.type=='text'" ng-bind-html-unsafe="layer.content"></div>
-                        <img ng-if="layer.type=='image'" class="layer-img" ng-src="{{layer.content}}" />
-                        <div ng-if="layer.type=='embed'" ng-bind-html-unsafe="layer.content"></div>
-
+                        <div ng-if="layer.type=='text'" ng-bind-html-unsafe="layer.content" class="{{layer.cssClass}}"></div>
+                        <img ng-if="layer.type=='image'" class="layer-img {{layer.cssClass}}" ng-src="{{layer.content}}" />
+                        <div ng-if="layer.type=='embed'" ng-bind-html-unsafe="layer.content" class="{{layer.cssClass}}"></div>
+                        <a ng-if="layer.type=='link' && layer.content.target"  class="{{layer.cssClass}}" href="{{layer.content.url}}" target="{{layer.content.target}}" ng-bind-html-unsafe="layer.content.name"></a>
+                        <a ng-if="layer.type=='link' && !layer.content.target" class="{{layer.cssClass}}" href="{{layer.content.url}}" ng-bind-html-unsafe="layer.content.name"></a>
                     </div>
 
                 </div>
@@ -110,7 +111,11 @@
                 <div class="layer-properties" ng-show="currentLayer">
 
                     <div ng-show="currentLayer.type=='text'">
-
+                        <h3>Layer Name</h3>
+                        <div class="property">
+                            <label>Name:</label>
+                            <input type="text" ng-model="currentLayer.name" />
+                        </div>
                         <h3>Text</h3>
 
                         <div class="property">
@@ -191,6 +196,10 @@
                             <label>Css:</label>
                             <textarea ng-model="currentLayer.customCss"></textarea>
                         </div>
+                        <div class="property">
+                            <label>Classes:</label>
+                            <input type="text" ng-model="currentLayer.cssClass" />
+                        </div>
 
                     </div>
 
@@ -207,8 +216,8 @@
                              ng-mouseover="setOverLayer(layer)"
                              ng-mouseleave="initOverLayer()"
                              ng-click="editLayer(layer)">
-
-                            <span>{{layer.type}} {{layer.name}}</span>
+                            
+                            <span>{{layer.type}} - <span class="layer-name">{{layer.name}}</span></span>
                             <i class="icon icon-navigation right medium"></i>
                             <i class="icon icon-trash right medium" ng-click="removeLayer($index)"></i>
 
@@ -216,12 +225,13 @@
                     </div>
 
                     <br />
+                    <div class="help-text dark">Click a type to add a new layer</div>
+                    <br />
                     <i class="icon icon-picture medium" ng-click="addPictureLayer()"></i>
                     <i class="icon icon-font medium" ng-click="addTextLayer()"></i>
                     <i class="icon icon-movie medium" ng-click="addMovieLayer()"></i>
+                    <i class="icon icon-link medium" ng-click="addLinkLayer()"></i>
                     <br />
-                    <div class="help-text dark">Add new layer</div>
-
                 </div>
 
             </div>

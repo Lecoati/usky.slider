@@ -260,12 +260,56 @@ angular.module("umbraco")
                 backgroundColor: "",
                 padding: 10,
                 customCss: "",
+                cssClass: ""
                 //dataEndspeed: "0",
                 //dataEndeasing: "0",
                 //dataEndspeed: "0",
                 //dataCaptionhidden: "0"
             });
             $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length - 1];
+        }
+
+        $scope.addLinkLayer = function () {
+            dialogService.linkPicker({
+                multiPicker: false,
+                callback: function (data) {
+
+                    //it's only a single selector, so make it into an array
+                    if (!false) {
+                        data = [data];
+                    }
+
+                    _.each(data, function (link, i) {
+                        if ($scope.currentSlide.layers == undefined) { $scope.currentSlide.layers = []; }
+                        $scope.currentSlide.layers.splice($scope.currentSlide.layers.length + 1, 0, {
+                            name: "Link " + ($scope.currentSlide.layers.length + 1),
+                            content: link,
+                            type: "link",
+                            animationClass: "sft",
+                            dataX: "0",
+                            dataY: "0",
+                            dataSpeed: "1000",
+                            dataStart: "800",
+                            dataEasing: "",
+                            width: 200,
+                            height: "",
+                            color: "",
+                            fontSize: "",
+                            fontStyle: "",
+                            fontName: "",
+                            padding: "",
+                            customCss: "",
+                            cssClass: "btn btn-default"
+                            //dataEndspeed: "0",
+                            //dataEndeasing: "0",
+                            //dataEndspeed: "0",
+                            //dataCaptionhidden: "0"
+                        });
+                        $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length - 1];
+                    });
+
+                }
+            });
         }
 
         $scope.addPictureLayer = function () {
@@ -286,7 +330,7 @@ angular.module("umbraco")
                             name: "Image " + ($scope.currentSlide.layers.length + 1),
                             content: media.image,
                             type: "image",
-                            animationClass: { value: "sft", alias: "ShortfromTop" },
+                            animationClass: "sft",
                             dataX: "0",
                             dataY: "0",
                             dataSpeed: "1000",
@@ -299,7 +343,8 @@ angular.module("umbraco")
                             fontStyle: "",
                             fontName: "",
                             padding: "",
-                            customCss: ""
+                            customCss: "",
+                            cssClass: ""
                             //dataEndspeed: "0",
                             //dataEndeasing: "0",
                             //dataEndspeed: "0",
