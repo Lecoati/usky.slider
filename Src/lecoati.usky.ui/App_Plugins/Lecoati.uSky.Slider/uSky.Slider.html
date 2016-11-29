@@ -12,11 +12,13 @@
                 <i class="icon icon-documents slide-delete medium" ng-click="duplicateSlide(slide, $index)"></i>
 
                 <div class="preview">
-                    <div class="image-preview" style="background-color:{{ slide.backgroundColor }}; background-image: url({{ slide.mediaThumbnail; }})">
-                        <a href="#" ng-hide="slide.mediaSrc != '' || slide.backgroundColor != ''" class="add-link" ng-click="addMedia(slide)" prevent-default>
+                    <label>Background Image:</label>
+
+                    <div class="image-preview" style="background-color:{{ slide.bgColor }}; background-image: url({{ slide.bgMediaThumbnail; }})">
+                        <a href="#" ng-hide="slide.bgMediaSrc != '' || slide.bgColor != ''" class="add-link" ng-click="addMedia(slide)" prevent-default>
                             <i class="icon icon-add medium"></i>
                         </a>
-                        <a href="" ng-show="slide.mediaSrc != '' || slide.backgroundColor != ''" class="picked-image" ng-click="removeMedia(slide)">
+                        <a href="" ng-show="slide.bgMediaSrc != '' || slide.backgroundColor != ''" class="picked-image" ng-click="removeMedia(slide)">
                             <i class="icon icon-delete medium"></i>
                         </a>
                     </div>
@@ -27,13 +29,69 @@
                     <div class="property">
                         <label>Background Color:</label>
                         <div class="simpleColorPicker">
-                            <input class="sliderrevolutioncolorpickertoggle colorInput" ng-model="slide.backgroundColor">
-                            <div class="sliderrevolutioncolorpickertoggle colorBk" style="background-color: {{ slide.backgroundColor }}"></div>
+                            <input class="sliderrevolutioncolorpickertoggle colorInput" ng-model="slide.bgColor">
+                            <div class="sliderrevolutioncolorpickertoggle colorBk" style="background-color: {{ slide.bgColor }}"></div>
                             <div class="colorPicker">
-                                <canvas sliderrevolutioncolorpickerdrawing color="slide.backgroundColor"></canvas>
+                                <canvas sliderrevolutioncolorpickerdrawing color="slide.bgColor"></canvas>
                             </div>
                         </div>
                     </div>
+
+                    <div class="property">
+                        <label>Background Alt:</label>
+                        <input type="text" ng-model="slide.bgAlt" class="background-alt" />
+                    </div>
+
+                    <div class="property">
+                        <label>Ken Burns:</label>
+                        <input type="checkbox" ng-model="slide.bgKenBurns" class="background-kenburns" />
+                    </div>
+
+                    <div class="property" ng-show="slide.bgKenBurns">
+                        <label>KenBurns Duration:</label>
+                        <input class="small-input" ng-model="slide.dataDuration" type="number" />
+                    </div>
+
+                    <div class="property" ng-show="slide.bgKenBurns">
+                        <label>KenBurns Easing:</label>
+                        <select class="small-input" ng-model="slide.dataEase" ng-options="dataEasingItem for dataEasingItem in dataEasing"></select>
+                    </div>
+
+                    <div class="property">
+                        <label>Background Pos:</label>
+                        <select class="small-input" ng-model="slide.bgPosition" ng-options="alignmentItem for alignmentItem in alignment"></select>
+                    </div>
+
+                    <div class="property" ng-show="slide.bgKenBurns">
+                        <label>BG Pos End:</label>
+                        <select class="small-input" ng-model="slide.bgPositionEnd" ng-options="alignmentItem for alignmentItem in alignment"></select>
+                    </div>
+
+                    <div class="property">
+                        <label>Background Fit:</label>
+                        <select class="small-input" ng-model="slide.bgFitSelect" ng-change="setBgFit(slide)" ng-options="fitItem for fitItem in fit"></select>
+                    </div>
+
+                    <div class="property" ng-show="slide.bgKenBurns">
+                        <label>BG Fit End:</label>
+                        <select class="small-input" ng-model="slide.bgFitEndSelect" ng-change="setBgFitEnd(slide)" ng-options="fitItem for fitItem in fit"></select>
+                    </div>
+
+                    <div class="property" ng-show="slide.bgFitSelect == 'custom'">
+                        <label>BG Fit #:</label>
+                        <input class="small-input" ng-model="slide.bgFit" type="number">
+                    </div>
+
+                    <div class="property" ng-show="slide.bgFitEndSelect == 'custom'">
+                        <label>BG Fit End #:</label>
+                        <input class="small-input" ng-model="slide.bgFitEnd" type="number">
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="properties">
 
                     <div class="property">
                         <label>Transition:</label>
@@ -41,18 +99,36 @@
                     </div>
 
                     <div class="property">
-                        <label>Slotamount:</label>
+                        <label>Slot Amount:</label>
                         <select ng-model="slide.dataSlotamount" ng-options="size for size in dataSlotamount" class="data-slotamount"></select>
                     </div>
 
                     <div class="property">
                         <label>Delay:</label>
-                        <input type="text" ng-model="slide.dataDelay" class="data-delay" />
+                        <input type="number" ng-model="slide.dataDelay" class="data-delay" />
                     </div>
 
                     <div class="property">
                         <label>Masterspeed:</label>
-                        <input type="text" ng-model="slide.dataMasterspeed" class="data-masterspeed" />
+                        <input type="number" ng-model="slide.dataMasterspeed" class="data-masterspeed" />
+                    </div>
+
+                    <div class="property">
+                        <label>Slide Thumbnail:</label>
+                        <div class="preview" ng-hide="slide.dataThumbMediaSrc == '' || slide.dataThumbMediaSrc == undefined">
+                            <div class="image-preview small" style="background-image: url({{ slide.dataThumbMediaThumbnail; }})">
+                                <a href="#" prevent-default ng-click="removeDataThumbMedia(slide)">
+                                    <i class="icon icon-delete red"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div ng-show="slide.dataThumbMediaSrc == '' || slide.dataThumbMediaSrc == undefined">
+                            <i class="icon icon-add blue"></i>
+                            <a href="#" ng-click="addDataThumbMedia(slide)" prevent-default>
+                                <localize key="general_add">Add</localize>
+                            </a>
+                        </div>
                     </div>
 
                 </div>
@@ -110,100 +186,135 @@
 
                 <div class="layer-properties" ng-show="currentLayer">
 
-                    <div ng-show="currentLayer.type=='text'">
-                        <h3>Layer Name</h3>
-                        <div class="property">
-                            <label>Name:</label>
-                            <input type="text" ng-model="currentLayer.name" />
-                        </div>
-                        <h3>Text</h3>
+                        <div>
+                            <h3>Position</h3>
 
-                        <div class="property">
-                            <label>Html:</label>
-                            <textarea ng-model="currentLayer.content"></textarea>
-                        </div>
+                            <div class="property">
+                                <label>X:</label>
+                                <input class="small-input" ng-model="currentLayer.dataX" ng-model-onblur type="number" />
+                            </div>
 
-                        <div class="property">
-                            <label>padding:</label>
-                            <input class="small-input" ng-model="currentLayer.padding" type="text" />
+                            <div class="property">
+                                <label>Y:</label>
+                                <input class="small-input" ng-model="currentLayer.dataY" ng-model-onblur type="number" />                            </div>
                         </div>
 
-                        <div class="property">
-                            <label>Google Font Name:</label>
-                            <input class="small-input" ng-model="currentLayer.fontName" type="text" ng-blur="loadGoogleFont(currentSlide)" />
-                        </div>
+                        <div ng-show="currentLayer.type=='text'">
 
-                        <div class="property">
-                            <label>Font size:</label>
-                            <input class="small-input" ng-model="currentLayer.fontSize" type="text" />
-                        </div>
+                            <h3>Text</h3>
 
-                        <div class="property">
-                            <label>Background:</label>
-                            <div class="simpleColorPicker">
-                                <input class="sliderrevolutioncolorpickertoggle colorInput" ng-model="currentLayer.backgroundColor">
-                                <div class="sliderrevolutioncolorpickertoggle colorBk" style="background-color: {{ currentLayer.backgroundColor; }}"></div>
-                                <div class="colorPicker">
-                                    <canvas sliderrevolutioncolorpickerdrawing color="currentLayer.backgroundColor"></canvas>
+                            <div class="property">
+                                <label>Html:</label>
+                                <textarea ng-model="currentLayer.content" ng-change="setLayerName(currentLayer)"></textarea>
+                            </div>
+
+                            <div class="property">
+                                <label>padding:</label>
+                                <input class="small-input" ng-model="currentLayer.padding" type="text" />
+                            </div>
+
+                            <div class="property">
+                                <label>Font size:</label>
+                                <input class="small-input" ng-model="currentLayer.fontSize" type="text" />
+                            </div>
+
+                            <div class="property">
+                                <label>Background:</label>
+                                <div class="simpleColorPicker">
+                                    <input class="sliderrevolutioncolorpickertoggle colorInput" ng-model="currentLayer.backgroundColor">
+                                    <div class="sliderrevolutioncolorpickertoggle colorBk" style="background-color: {{ currentLayer.backgroundColor; }}"></div>
+                                    <div class="colorPicker">
+                                        <canvas sliderrevolutioncolorpickerdrawing color="currentLayer.backgroundColor"></canvas>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="property">
-                            <label>Font color:</label>
-                            <div class="simpleColorPicker">
-                                <input class="sliderrevolutioncolorpickertoggle colorInput" ng-model="currentLayer.color">
-                                <div class="sliderrevolutioncolorpickertoggle colorBk" style="background-color: {{ currentLayer.color; }}"></div>
-                                <div class="colorPicker">
-                                    <canvas sliderrevolutioncolorpickerdrawing color="currentLayer.color"></canvas>
+                            <div class="property">
+                                <label>Font color:</label>
+                                <div class="simpleColorPicker">
+                                    <input class="sliderrevolutioncolorpickertoggle colorInput" ng-model="currentLayer.color">
+                                    <div class="sliderrevolutioncolorpickertoggle colorBk" style="background-color: {{ currentLayer.color; }}"></div>
+                                    <div class="colorPicker">
+                                        <canvas sliderrevolutioncolorpickerdrawing color="currentLayer.color"></canvas>
+                                    </div>
                                 </div>
                             </div>
+
+                        </div>
+
+                        <div>
+
+                            <h3>Animation</h3>
+
+                            <div class="property">
+                                <label>dataStart:</label>
+                                <input class="small-input" ng-model="currentLayer.dataStart" type="number" />
+                            </div>
+
+                            <div class="property">
+                                <label>dataSpeed:</label>
+                                <input class="small-input" ng-model="currentLayer.dataSpeed" type="number" />
+                            </div>
+
+                            <div class="property">
+                                <label>dataEndSpeed:</label>
+                                <input class="small-input" ng-model="currentLayer.dataEndSpeed" type="number" />
+                            </div>
+
+                            <div class="property">
+                                <label>dataElementDelay:</label>
+                                <input class="small-input" ng-model="currentLayer.dataElementDelay" type="number" />
+                            </div>
+
+                            <div class="property">
+                                <label>animation:</label>
+                                <select class="small-input" ng-model="currentLayer.animationClass" ng-options="classe as classe.alias for classe in animationClasses track by classe.value"></select>
+                            </div>
+
+                            <div class="property">
+                                <label>dataEasing:</label>
+                                <select class="small-input" ng-model="currentLayer.dataEasing" ng-options="dataEasingItem for dataEasingItem in dataEasing"></select>
+                            </div>
+
+                            <div class="property">
+                                <label>Split In:</label>
+                                <select class="small-input" ng-model="currentLayer.dataSplitIn" ng-options="splitItem for splitItem in split"></select>
+                            </div>
+
+                            <div class="property">
+                                <label>Split Out:</label>
+                                <select class="small-input" ng-model="currentLayer.dataSplitOut" ng-options="splitItem for splitItem in split"></select>
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <h3>Custom CSS</h3>
+
+                            <div class="property">
+                                <label>CSS Class:</label>
+                                <textarea ng-model="currentLayer.customCss"></textarea>
+                            </div>
+
+                            <div class="property">
+                                <label>CSS Style:</label>
+                                <textarea ng-model="currentLayer.customStyle"></textarea>
+                            </div>
+
+                            <div class="property">
+                                <label>Custom In:</label>
+                                <textarea ng-model="currentLayer.customIn"></textarea>
+                            </div>
+
+                            <div class="property">
+                                <label>Custom Out:</label>
+                                <textarea ng-model="currentLayer.customOut"></textarea>
+                            </div>
+
                         </div>
 
                     </div>
-
-                    <div>
-
-                        <h3>Animation</h3>
-
-                        <div class="property">
-                            <label>dataStart:</label>
-                            <input class="small-input" ng-model="currentLayer.dataStart" type="text" />
-                        </div>
-
-                        <div class="property">
-                            <label>dataSpeed:</label>
-                            <input class="small-input" ng-model="currentLayer.dataSpeed" type="text" />
-                        </div>
-
-                        <div class="property">
-                            <label>animation:</label>
-                            <select class="small-input" ng-model="currentLayer.animationClass" ng-options="classe.value as classe.alias for classe in animationClasses"></select>
-                        </div>
-
-                        <div class="property">
-                            <label>dataEasing:</label>
-                            <select class="small-input" ng-model="currentLayer.dataEasing" ng-options="dataEasingItem for dataEasingItem in dataEasing"></select>
-                        </div>
-
-                    </div>
-
-                    <div>
-
-                        <h3>Custom css</h3>
-
-                        <div class="property">
-                            <label>Css:</label>
-                            <textarea ng-model="currentLayer.customCss"></textarea>
-                        </div>
-                        <div class="property">
-                            <label>Classes:</label>
-                            <input type="text" ng-model="currentLayer.cssClass" />
-                        </div>
-
-                    </div>
-
-                </div>
 
                 <div class="layer-order">
 
@@ -230,7 +341,6 @@
                     <i class="icon icon-picture medium" ng-click="addPictureLayer()"></i>
                     <i class="icon icon-font medium" ng-click="addTextLayer()"></i>
                     <i class="icon icon-movie medium" ng-click="addMovieLayer()"></i>
-                    <i class="icon icon-link medium" ng-click="addLinkLayer()"></i>
                     <br />
                 </div>
 

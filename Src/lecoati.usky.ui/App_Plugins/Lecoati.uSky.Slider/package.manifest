@@ -11,6 +11,18 @@
 			prevalues: {
 				fields:[
 					{
+					   label: "Container CSS Class",
+					   description: "default (none)",
+					   key: "containerCss",
+					   view: "textstring"
+					},
+					{
+					   label: "Slider CSS Class",
+					   description: "default (none)",
+					   key: "sliderCss",
+					   view: "textstring"
+					},
+					{
 					   label: "Slider Width",
 					   description: "default 1140px",
 					   key: "width",
