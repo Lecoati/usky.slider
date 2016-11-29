@@ -63,6 +63,10 @@
         display: inline-block;
     }
 
+    .slider-revolution hr {
+        border-top: 2px solid #d9d9d9;
+    }
+
     .slider-revolution .image-preview {
         background-repeat: no-repeat; 
         background-attachment: scroll; 
@@ -78,6 +82,7 @@
         display:inline-block;
         overflow:hidden;
         float: left;
+        margin-right: 5px;
     }
 
     .slider-revolution .preview div {
@@ -112,7 +117,7 @@
     }
 
     .slider-revolution .slider-editor .property {
-        width: 270px;
+        width: 300px;
     }
 
     .slider-revolution .property label {
@@ -120,8 +125,28 @@
         width: 130px;
         text-align: right;
         line-height: 28px;
+        padding-right: 5px;
     }
 
+    .slider-revolution .property .preview {
+        border: 2px #d9d9d9 dashed!important;
+        display:inline-block;
+        overflow:hidden;
+    }
+
+    .slider-revolution .property .image-preview {
+        width: 35px;
+        height: 35px;
+    }
+
+    .slider-revolution .property .image-preview a {
+        display: inline-block;
+        width: 100%;
+        line-height: 35px;
+        text-align: center;
+        text-decoration: none;
+    }
+        
     .slider-revolution .simpleColorPicker .colorBk {
         float: left;
         left: 0px;
@@ -257,11 +282,12 @@
     }
 
     .slider-revolution input {
-        width: 107px;
+        width: auto;
     }
 
     .slider-revolution select {
-        width: 121px;
+        width: 170px;
+        text-align: left !important;
     }
 
     .slider-revolution h3 {

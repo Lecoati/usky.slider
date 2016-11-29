@@ -50,41 +50,63 @@ angular.module("umbraco")
 
         // Easing
         $scope.dataEasing = [
-            "easeOutBack",
-            "easeInQuad",
-            "easeOutQuad",
-            "easeInOutQuad",
-            "easeInCubic",
-            "easeOutCubic",
-            "easeInOutCubic",
-            "easeInQuart",
-            "easeOutQuart",
-            "easeInOutQuart",
-            "easeInQuint",
-            "easeOutQuint",
-            "easeInOutQuint",
-            "easeInSine",
-            "easeOutSine",
-            "easeInOutSine",
-            "easeInExpo",
-            "easeOutExpo",
-            "easeInOutExpo",
-            "easeInCirc",
-            "easeOutCirc",
-            "easeInOutCirc",
-            "easeInElastic",
-            "easeOutElastic",
-            "easeInOutElastic",
-            "easeInBack",
-            "easeOutBack",
-            "easeInOutBack",
-            "easeInBounce",
-            "easeOutBounce",
-            "easeInOutBounce"
+            "",
+            "Linear.easeNone",
+            "Power0.easeIn",
+            "Power0.easeInOut",
+            "Power0.easeOut",
+            "Power1.easeIn",
+            "Power1.easeInOut",
+            "Power1.easeOut",
+            "Power2.easeIn",
+            "Power2.easeInOut",
+            "Power2.easeOut",
+            "Power3.easeIn",
+            "Power3.easeInOut",
+            "Power3.easeOut",
+            "Power4.easeIn",
+            "Power4.easeInOut",
+            "Power4.easeOut",
+            "Quad.easeIn",
+            "Quad.easeInOut",
+            "Quad.easeOut",
+            "Cubic.easeIn",
+            "Cubic.easeInOut",
+            "Cubic.easeOut",
+            "Quart.easeIn",
+            "Quart.easeInOut",
+            "Quart.easeOut",
+            "Quint.easeIn",
+            "Quint.easeInOut",
+            "Quint.easeOut",
+            "Strong.easeIn",
+            "Strong.easeInOut",
+            "Strong.easeOut",
+            "Back.easeIn",
+            "Back.easeInOut",
+            "Back.easeOut",
+            "Bounce.easeIn",
+            "Bounce.easeInOut",
+            "Bounce.easeOut",
+            "Circ.easeIn",
+            "Circ.easeInOut",
+            "Circ.easeOut",
+            "Elastic.easeIn",
+            "Elastic.easeInOut",
+            "Elastic.easeOut",
+            "Expo.easeIn",
+            "Expo.easeInOut",
+            "Expo.easeOut",
+            "Sine.easeIn",
+            "Sine.easeInOut",
+            "Sine.easeOut",
+            "SlowMo.ease",
         ];
 
         // Animation
         $scope.animationClasses = [
+            //note: first item will be the default
+            { value: "", alias: "none"}, 
             { value: "sft", alias: "ShortfromTop" },
             { value: "sfb", alias: "ShortfromBottom" },
             { value: "sfr", alias: "ShortfromRight" },
@@ -93,11 +115,41 @@ angular.module("umbraco")
             { value: "lfb", alias: "LongfromBottom" },
             { value: "lfr", alias: "LongfromRight" },
             { value: "lfl", alias: "LongfromLeft" },
-            { value: "fade", alias: "fading" }
+            { value: "fade", alias: "Fading" }
         ];
+
+        // Alignment
+        $scope.alignment = [
+            "top left",
+            "top center",
+            "top right",
+            "center left",
+            "center center",
+            "center right",
+            "bottom left",
+            "bottom center",
+            "bottom right",
+        ];
+
+        // Fit
+        $scope.fit = [
+            "auto",
+            "cover",
+            "contain",
+            "custom"
+        ];
+
+        // Split
+        $scope.split = [
+            "none",
+            "chars",
+            "words",
+            "lines"
+        ]
 
         // Slide slot amount
         $scope.dataSlotamount = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
         //$scope.selectedSlideIndex = -1;
         //$scope.selectedLayerIndex = -1;
         $scope.currentSlide;
@@ -114,13 +166,26 @@ angular.module("umbraco")
             $scope.model.value.slides.splice($scope.model.value.slides.length + 1, 0,
             {
                 dataTransition: "random",
-                dataSlotamount: "0",
-                dataDelay: "",
-                dataMasterspeed: "",
-                mediaId: -1,
-                mediaSrc: '',
-                mediaThumbnail: '',
-                backgroundColor: '',
+                dataSlotamount: 0,
+                dataDelay: 0,
+                dataDuration: 0,
+                dataEase: "",
+                dataMasterspeed: 0,
+                dataThumbMediaId: -1,
+                dataThumbMediaSrc: '',
+                dataThumbMediaThumbnail: '',
+                bgMediaId: -1,
+                bgMediaSrc: '',
+                bgMediaThumbnail: '',
+                bgKenBurns: false,
+                bgColor: '',
+                bgAlt: '',
+                bgFit: '',
+                bgFitEnd: '',
+                bgFitSelect: '',
+                bgFitEndSelect: '',
+                bgPosition: '',
+                bgPositionEnd: '',
                 //previousParentWidth: $scope.fluidWidth,
                 //previousParentHeight: $scope.fluidHeight,
                 layers: []
@@ -160,10 +225,10 @@ angular.module("umbraco")
 
         /* remove media slide background */
         $scope.removeMedia = function (slide) {
-            slide.backgroundColor = '';
-            slide.mediaThumbnail = '';
-            slide.mediaId = -1;
-            slide.mediaSrc = ''
+            slide.bgColor = '';
+            slide.bgMediaThumbnail = '';
+            slide.bgMediaId = -1;
+            slide.bgMediaSrc = ''
         }
 
         /* add slide media background*/
@@ -180,14 +245,60 @@ angular.module("umbraco")
 
                     _.each(data, function (media, i) {
                         media.thumbnail = imageHelper.getThumbnailFromPath(media.image);
-                        slide.mediaId = media.id;
-                        slide.mediaSrc = media.image;
-                        slide.mediaThumbnail = media.thumbnail;
+                        slide.bgMediaId = media.id;
+                        slide.bgMediaSrc = media.image;
+                        slide.bgMediaThumbnail = media.thumbnail;
                     });
 
                 }
             });
         };
+
+        /* remove data-thumb media */
+        $scope.removeDataThumbMedia = function (slide) {
+            slide.dataThumbMediaThumbnail = '';
+            slide.dataThumbMediaId = -1;
+            slide.dataThumbMediaSrc = ''
+        }
+
+        /* add data-thumb media */
+        $scope.addDataThumbMedia = function (slide) {
+            dialogService.mediaPicker({
+                multiPicker: false,
+                startNodeId: $scope.model.config.mediaStartNode,
+                callback: function (data) {
+
+                    //it's only a single selector, so make it into an array
+                    if (!false) {
+                        data = [data];
+                    }
+
+                    _.each(data, function (media, i) {
+                        media.thumbnail = imageHelper.getThumbnailFromPath(media.image);
+                        slide.dataThumbMediaId = media.id;
+                        slide.dataThumbMediaSrc = media.image;
+                        slide.dataThumbMediaThumbnail = media.thumbnail;
+                    });
+
+                }
+            });
+        };
+
+        /* update bg-fit combobox */
+        $scope.setBgFit = function(slide) {
+            if (slide.bgFitSelect == 'custom')
+                slide.bgFit = '100'
+            else
+                slide.bgFit = slide.bgFitSelect
+        }
+
+        /* update bg-fit-end combobox */
+        $scope.setBgFitEnd = function (slide) {
+            if (slide.bgFitEndSelect == 'custom')
+                slide.bgFitEnd = '100'
+            else
+                slide.bgFitEnd = slide.bgFitEndSelect
+        }
 
         /********************************************************************************************/
         /* Layer managment */
@@ -243,30 +354,35 @@ angular.module("umbraco")
             if ($scope.currentSlide.layers == undefined) { $scope.currentSlide.layers = []; }
             $scope.currentSlide.layers.splice($scope.currentSlide.layers.length + 1, 0, {
                 name: "Text " + ($scope.currentSlide.layers.length + 1),
+                index: ($scope.currentSlide.layers.length + 1),
+                mediaName: "",
                 content: "Lorem lipsum",
                 type: "text",
-                animationClass: "sft",
-                dataX: "0",
-                dataY: "0",
-                dataSpeed: "1000",
-                dataStart: "800",
+                animationClass: $scope.animationClasses[0],
+                dataX: 0,
+                dataY: 0,
+                dataSpeed: 1000,
+                dataEndSpeed: 1000,
+                dataStart: 800,
                 dataEasing: "",
+                dataSplitIn: "none",
+                dataSplitOut: "none",
+                dataElementDelay: 0,
                 width: "",
                 height: "",
-                color: "#333",
-                fontSize: 26,
+                color: "",
+                fontSize: "",
                 fontStyle: "",
-                fontName: "Open Sans",
-                backgroundColor: "",
-                padding: 10,
+                bgColor: "",
+                padding: "",
                 customCss: "",
-                cssClass: ""
-                //dataEndspeed: "0",
+                customStyle: "",
+                customIn: "",
+                customOut: ""
                 //dataEndeasing: "0",
-                //dataEndspeed: "0",
                 //dataCaptionhidden: "0"
             });
-            $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length - 1];
+            $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length -1];
         }
 
         $scope.addLinkLayer = function () {
@@ -328,29 +444,34 @@ angular.module("umbraco")
                         if ($scope.currentSlide.layers == undefined) { $scope.currentSlide.layers = []; }
                         $scope.currentSlide.layers.splice($scope.currentSlide.layers.length + 1, 0, {
                             name: "Image " + ($scope.currentSlide.layers.length + 1),
+                            index: ($scope.currentSlide.layers.length + 1),
+                            mediaName: media.name,
                             content: media.image,
                             type: "image",
-                            animationClass: "sft",
-                            dataX: "0",
-                            dataY: "0",
-                            dataSpeed: "1000",
-                            dataStart: "800",
+                            animationClass: $scope.animationClasses[0],
+                            dataX: 0,
+                            dataY: 0,
+                            dataSpeed: 1000,
+                            dataEndSpeed: 1000,
+                            dataStart: 800,
                             dataEasing: "",
+                            dataSplitIn: "none",
+                            dataSplitOut: "none",
                             width: 200,
                             height: "",
                             color: "",
                             fontSize: "",
                             fontStyle: "",
-                            fontName: "",
                             padding: "",
                             customCss: "",
-                            cssClass: ""
-                            //dataEndspeed: "0",
+                            customStyle: "",
+                            customIn: "",
+                            customOut: ""
                             //dataEndeasing: "0",
-                            //dataEndspeed: "0",
                             //dataCaptionhidden: "0"
                         });
-                        $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length -1];
+                        $scope.currentLayer = $scope.currentSlide.layers[$scope.currentSlide.layers.length - 1];
+                        $scope.setLayerName($scope.currentLayer);
                     });
 
                 }
@@ -376,11 +497,11 @@ angular.module("umbraco")
         $scope.setSliderStyle = function () {
             if ($scope.model.value && $scope.currentSlide) {
                 return {
-                    'background-color': $scope.currentSlide.backgroundColor,
-                    'background-image': 'url(' + $scope.currentSlide.mediaSrc + ')',
+                    'background-color': $scope.currentSlide.bgColor,
+                    'background-image': 'url(' + $scope.currentSlide.bgMediaSrc + ')',
                     'height': $scope.model.value.editorHeight + 'px',
                     'background-size':  $scope.model.config.imageFullWidth == 0 ? 'cover' : '100%',
-                    'background-position': 'top center'
+                    'background-position': $scope.currentSlide.bgPosition
                 }
             }
         };
@@ -392,6 +513,19 @@ angular.module("umbraco")
                 }
             }
         };
+
+        $scope.setLayerName = function(layer) {
+            if (layer) {
+                if (layer.type == "text") {
+                    layer.name = layer.content;
+                }
+                else if (layer.type == "image" && layer.mediaName) {
+                    layer.name = layer.mediaName
+                } else {
+                    layer.name = layer.index;
+                }
+            }
+        }
 
         $scope.setLayerStyle = function (layer) {
             if (layer) {
@@ -435,6 +569,8 @@ angular.module("umbraco")
         var height = $scope.model.config.height ? $scope.model.config.height : 550;
         var editorWidth = $scope.model.config.editorWidth ? $scope.model.config.editorWidth : 1140;
         var editorHeight = $scope.model.config.editorHeight ? $scope.model.config.editorHeight : 550;
+        var cssContainer = $scope.model.config.containerCss;
+        var cssSlider = $scope.model.config.sliderCss;
 
         if (!$scope.model.value ||
             $scope.model.value == '') {
@@ -443,6 +579,8 @@ angular.module("umbraco")
                 height: height,
                 editorWidth: editorWidth,
                 editorHeight: editorHeight,
+                cssContainer: cssContainer,
+                cssSlider: cssSlider,
                 slides: []
             }
         }
@@ -450,7 +588,9 @@ angular.module("umbraco")
             $scope.model.value.width = width,
             $scope.model.value.height = height,
             $scope.model.value.editorWidth = editorWidth,
-            $scope.model.value.editorHeight = editorHeight
+            $scope.model.value.editorHeight = editorHeight,
+            $scope.model.value.cssContainer = cssContainer,
+            $scope.model.value.cssSlider = cssSlider
         }
 
         var unsubscribe = $scope.$on("formSubmitting", function () {

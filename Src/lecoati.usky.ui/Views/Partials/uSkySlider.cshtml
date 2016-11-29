@@ -1,7 +1,6 @@
 @inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 
 @{
-
     dynamic slider = @Model.Content.GetPropertyValue("slider");
 
     decimal width = !string.IsNullOrEmpty(slider.width.Value.ToString()) ? decimal.Parse(slider.width.Value.ToString()) : 0;
@@ -9,62 +8,84 @@
     decimal editorWidth = !string.IsNullOrEmpty(slider.editorWidth.Value.ToString()) ? decimal.Parse(slider.editorWidth.Value.ToString()) : width;
     decimal editorHeight = !string.IsNullOrEmpty(slider.editorHeight.Value.ToString()) ? decimal.Parse(slider.editorHeight.Value.ToString()) : height;
 
-    var withFactor = width / editorWidth;
+    var widthFactor = width / editorWidth;
     var heightFactor = height / editorHeight;
 
+    var cssContainer = slider.cssContainer.Value.ToString();
+    var cssSlider = slider.cssSlider.Value.ToString();
 }
 
-<div class="tp-banner-container">
-    <div class="tp-banner">
+<div class="@cssContainer tp-banner-container">
+    <div class="@cssSlider tp-banner">
         <ul>
-
             @foreach (var index in slider.slides)
             {
-                
-                <li @( !string.IsNullOrEmpty(index.dataTransition.ToString()) ? "data-transition=" + index.dataTransition : "")
-                    @( !string.IsNullOrEmpty(index.dataSlotamount.ToString()) ? "data-slotamount=" + index.dataSlotamount : "")
-                    @( !string.IsNullOrEmpty(index.dataDelay.ToString()) ? "data-delay=" + index.dataDelay : "")
-                    @( !string.IsNullOrEmpty(index.dataMasterspeed.ToString()) ? "data-masterspeed=" + index.dataMasterspeed : "") style="width: 1900px;">
+                var dataTransition = !string.IsNullOrEmpty(index.dataTransition.ToString()) ? index.dataTransition : null;
+                var dataSlotamount = !string.IsNullOrEmpty(index.dataSlotamount.ToString()) ? index.dataSlotamount : null;
+                var dataDelay = !string.IsNullOrEmpty(index.dataDelay.ToString()) ? index.dataDelay : null;
+                var dataMasterspeed = !string.IsNullOrEmpty(index.dataMasterspeed.ToString()) ? index.dataMasterspeed : null;
+                var dataThumb = !string.IsNullOrEmpty(index.dataThumbMediaSrc.ToString()) ? index.dataThumbMediaSrc : null;
 
-                    <img src="@(!string.IsNullOrEmpty(index.mediaSrc.ToString()) ? index.mediaSrc : "/App_Plugins/Lecoati.uSky.Slider/assets/transparent.png")"
-                         style="background-color: @index.backgroundColor"
-                         data-bgfit="cover"
-                         data-bgposition="left top"
-                         data-bgrepeat="no-repeat">
+                //calculate background image and color 
+                //Note: uses lazyload to load background img and only sets background-color if defined
+                var bgStyle = !string.IsNullOrEmpty(index.bgColor.ToString()) ? "background-color:" + index.bgColor : null;
+                var bgKenBurns = index.bgKenBurns.Value ? "on" : "off";
 
+                <li data-transition="@dataTransition" data-slotamount="@dataSlotamount" data-delay="@dataDelay" data-masterspeed="@dataMasterspeed" data-thumb="@dataThumb">
+                    
+                    @*Main Image*@
+                    <img src="/App_Plugins/Lecoati.uSky.Slider/assets/transparent.png"
+                         alt="@index.bgAlt" data-lazyload="@index.bgMediaSrc" style="@bgStyle"
+                         data-bgposition="@index.bgPosition" data-bgfit="@index.bgFit"
+                         data-kenburns="@bgKenBurns" data-duration="@index.dataDuration" data-ease="@index.dataEase" 
+                         data-bgfitend="@index.bgFitEnd" data-bgpositionend="@index.bgPositionEnd"/>
+
+                    @*Layers*@
+
+                    @{var zIndex = 1;}
                     @foreach (var layer in index.layers)
                     {
+                        zIndex++;
+                        var dataX = layer.dataX != null && !string.IsNullOrEmpty(layer.dataX.ToString()) ? (decimal.Parse(layer.dataX.ToString())*widthFactor).ToString() : "0";
+                        var dataY = layer.dataY != null && !string.IsNullOrEmpty(layer.dataY.ToString()) ? (decimal.Parse(layer.dataY.ToString())*widthFactor).ToString() : "0";
 
-                        var datax = layer.dataX != null && !string.IsNullOrEmpty(layer.dataX.ToString()) ? (decimal.Parse(layer.dataX.ToString()) * withFactor).ToString() : "0";
-                        var datay = layer.dataY != null && !string.IsNullOrEmpty(layer.dataY.ToString()) ? (decimal.Parse(layer.dataY.ToString()) * withFactor).ToString() : "0";
-                        var padding = layer.padding != null && !string.IsNullOrEmpty(layer.padding.ToString()) ? (decimal.Parse(layer.padding.ToString()) * withFactor).ToString() + "px" : "0px";
-                        var fontSize = layer.fontSize != null && !string.IsNullOrEmpty(layer.fontSize.ToString()) ? (decimal.Parse(layer.fontSize.ToString()) * withFactor).ToString() + "px" : "0px";
-                        var fontName = layer.fontName != null && !string.IsNullOrEmpty(layer.fontName.ToString()) ? layer.fontName.ToString() : "Noto Sans";
-                        var lineHeight = layer.fontSize != null && !string.IsNullOrEmpty(layer.fontSize.ToString()) ? (decimal.Parse(layer.fontSize.ToString()) * withFactor).ToString() + "px" : "0px";
-                        var layerwidth = layer.width != null && !string.IsNullOrEmpty(layer.width.ToString()) ? (decimal.Parse(layer.width.ToString()) * withFactor).ToString() + "px" : "0px";
+                        //configure custom styles
+                        var layerBackgroundColor = layer.backgroundColor != null && !string.IsNullOrEmpty(layer.backgroundColor.ToString()) ? " background-color: " + layer.backgroundColor.Value + ";": null;
+                        var layerColor = layer.color != null && !string.IsNullOrEmpty(layer.color.ToString()) ? " color: " + layer.color.Value + ";" : null;
+                        var layerPadding = layer.padding != null && !string.IsNullOrEmpty(layer.padding.ToString()) ? " padding: " + layer.padding.Value + ";" : null;
+                        var layerFontSize = layer.fontSize != null && !string.IsNullOrEmpty(layer.fontSize.ToString()) ? " font-size: " + layer.fontSize.Value + ";" : null;
+                        var layerHeight = layer.height != null && !string.IsNullOrEmpty(layer.height.ToString()) ? " line-height: " + layer.height.Value + "px;" : null;
+                        var layerWidth = layer.width != null && !string.IsNullOrEmpty(layer.width.ToString()) ? " " + (decimal.Parse(layer.width.ToString()) * widthFactor).ToString() + "px" : "0px";
 
-                        <div class="tp-caption @layer.animationClass"
-                             data-x="@datax"
-                             data-y="@datay"
-                             data-speed="@layer.dataSpeed"
-                             data-start="@layer.dataStart"
-                             data-easing="@layer.dataEasing"
-                             style="z-index: 4; background-color: @layer.backgroundColor; color: @layer.color; @layer.customCss; padding: @padding; font-family: @fontName; font-size: @fontSize; line-height: @lineHeight">
+                            <div class="tp-caption @layer.customCss @layer.animationClass.Value"
+                                 data-x="@dataX"
+                                 data-y="@dataY"
+                                 data-speed="@layer.dataSpeed"
+                                 data-endspeed="@layer.dataEndSpeed"
+                                 data-start="@layer.dataStart"
+                                 data-easing="@layer.dataEasing"
+                                 data-splitin="@layer.dataSplitIn"
+                                 data-splitout="@layer.dataSplitOut"
+                                 data-elementdelay="@layer.dataElementDelay"
+                                 data-customin="@layer.customIn"
+                                 data-customout="@layer.customOut"
+                                 style="z-index: @zIndex; @layerBackgroundColor @layerColor @layerPadding @layerFontSize @layerHeight @layer.customStyle">
 
-                            @if (layer.type == "text")
-                            {
-                                @Html.Raw(layer.content)
-                            }
-                            @if (layer.type == "embed")
-                            {
-                                @Html.Raw(layer.content)
-                            }
-                            @if (layer.type == "image")
-                            {
-                                <img src="@Html.Raw(layer.content)" width="@layerwidth">
-                            }
-                            
-                        </div>
+                                @if (layer.type == "text")
+                                {
+                                    @Html.Raw(layer.content)
+                                }
+                                @if (layer.type == "embed")
+                                {
+                                    @Html.Raw(layer.content)
+                                }
+                                @if (layer.type == "image")
+                                {
+                                    <img src="/App_Plugins/Lecoati.uSky.Slider/assets/transparent.png"
+                                         width="@layerWidth" data-lazyload="@Html.Raw(layer.content)"/>
+                                }
+
+                            </div>
                     }
                 </li>
             }
