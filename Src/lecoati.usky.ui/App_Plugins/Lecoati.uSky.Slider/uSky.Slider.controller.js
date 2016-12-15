@@ -121,6 +121,13 @@ angular.module("umbraco")
                 mediaSrc: '',
                 mediaThumbnail: '',
                 backgroundColor: '',
+                dataAnimateBg: '',
+                dataAnimateBgPositionStart: '',
+                dataAnimateBgPositionEnd: '',
+                dataAnimateBgDuration: '',
+                dataAnimateBgEase: '',
+                dataAnimateBgFitStart: '',
+                dataAnimateBgFitEnd: '',
                 //previousParentWidth: $scope.fluidWidth,
                 //previousParentHeight: $scope.fluidHeight,
                 layers: []

@@ -55,6 +55,38 @@
                         <input type="text" ng-model="slide.dataMasterspeed" class="data-masterspeed" />
                     </div>
 
+                    <h3>Animation</h3>
+                    <div class="property">
+                        <label>Animate Slide</label>
+                        <input type="checkbox" ng-model="slide.dataAnimateBg" value="true" />
+                    </div>
+
+                    <div class="property">
+                        <label>Duration:</label>
+                        <input type="text" ng-model="slide.dataAnimateBgDuration" class="data-masterspeed" />
+                    </div>
+
+                    <div class="property">
+                        <label>Easing:</label>
+                        <select class="small-input" ng-model="slide.dataAnimateBgEase" ng-options="dataEasingItem for dataEasingItem in dataEasing"></select>
+                    </div>
+
+                    <div class="property">
+                        <label>Position Start:</label>
+                        <input type="text" ng-model="slide.dataAnimateBgPositionStart" class="data-masterspeed" />
+                    </div>
+                    <div class="property">
+                        <label>Position End:</label>
+                        <input type="text" ng-model="slide.dataAnimateBgPositionEnd" class="data-masterspeed" />
+                    </div>
+                    <div class="property">
+                        <label>Fit Start:</label>
+                        <input type="text" ng-model="slide.dataAnimateBgFitStart" class="data-masterspeed" />
+                    </div>
+                    <div class="property">
+                        <label>Fit End:</label>
+                        <input type="text" ng-model="slide.dataAnimateBgFitEnd" class="data-masterspeed" />
+                    </div>
                 </div>
 
             </div>
@@ -164,7 +196,7 @@
 
                     <div>
 
-                        <h3>Animation</h3>
+                        <h3>Text Animation</h3>
 
                         <div class="property">
                             <label>dataStart:</label>
