@@ -20,7 +20,25 @@
 
             @foreach (var index in slider.slides)
             {
-                
+                string bgposstart = "";
+                if (!string.IsNullOrEmpty(index.dataAnimateBgPositionStart.ToString()))
+                {
+                    bgposstart = "data-bgposition= '" + index.dataAnimateBgPositionStart.ToString() + "'";
+                }
+
+                string bgposend = "";
+                if (!string.IsNullOrEmpty(index.dataAnimateBgPositionEnd.ToString()))
+                {
+                    bgposend = "data-bgpositionend= '" + index.dataAnimateBgPositionEnd.ToString() + "'";
+                }
+
+                string kenburns = "off";
+                if (!string.IsNullOrEmpty(index.dataAnimateBg.ToString()))
+                {
+                    kenburns = index.dataAnimateBg == "True" ? "on" : "off";
+                }
+
+
                 <li @( !string.IsNullOrEmpty(index.dataTransition.ToString()) ? "data-transition=" + index.dataTransition : "")
                     @( !string.IsNullOrEmpty(index.dataSlotamount.ToString()) ? "data-slotamount=" + index.dataSlotamount : "")
                     @( !string.IsNullOrEmpty(index.dataDelay.ToString()) ? "data-delay=" + index.dataDelay : "")
@@ -28,9 +46,15 @@
 
                     <img src="@(!string.IsNullOrEmpty(index.mediaSrc.ToString()) ? index.mediaSrc : "/App_Plugins/Lecoati.uSky.Slider/assets/transparent.png")"
                          style="background-color: @index.backgroundColor"
-                         data-bgfit="cover"
-                         data-bgposition="left top"
-                         data-bgrepeat="no-repeat">
+                         data-bgrepeat="no-repeat"
+                         @* BG Animation*@
+                         data-kenburns="@kenburns"
+                         @Html.Raw(bgposstart)
+                         @Html.Raw(bgposend)
+                         @(!string.IsNullOrEmpty(index.dataAnimateBgDuration.ToString()) ? "data-duration=" + index.dataAnimateBgDuration : "")
+                         @(!string.IsNullOrEmpty(index.dataAnimateBgEase.ToString()) ? "data-ease=" + index.dataAnimateBgEase : "")
+                         @(!string.IsNullOrEmpty(index.dataAnimateBgFitStart.ToString()) ? "data-bgfit=" + index.dataAnimateBgFitStart : "")
+                         @(!string.IsNullOrEmpty(index.dataAnimateBgFitEnd.ToString()) ? "data-bgfitend=" + index.dataAnimateBgFitEnd : "") />
 
                     @foreach (var layer in index.layers)
                     {
@@ -43,6 +67,7 @@
                         var lineHeight = layer.fontSize != null && !string.IsNullOrEmpty(layer.fontSize.ToString()) ? (decimal.Parse(layer.fontSize.ToString()) * withFactor).ToString() + "px" : "0px";
                         var layerwidth = layer.width != null && !string.IsNullOrEmpty(layer.width.ToString()) ? (decimal.Parse(layer.width.ToString()) * withFactor).ToString() + "px" : "0px";
 
+                        //bg animation
                         <div class="tp-caption @layer.animationClass"
                              data-x="@datax"
                              data-y="@datay"
@@ -63,7 +88,7 @@
                             {
                                 <img src="@Html.Raw(layer.content)" width="@layerwidth">
                             }
-                            
+
                         </div>
                     }
                 </li>
