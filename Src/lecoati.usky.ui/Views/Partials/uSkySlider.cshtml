@@ -1,8 +1,7 @@
 @inherits Umbraco.Web.Mvc.UmbracoTemplatePage
-
 @{
 
-    dynamic slider = @Model.Content.GetPropertyValue("slider");
+    dynamic slider = Model.Content.GetPropertyValue("slider");
 
     decimal width = !string.IsNullOrEmpty(slider.width.Value.ToString()) ? decimal.Parse(slider.width.Value.ToString()) : 0;
     decimal height = !string.IsNullOrEmpty(slider.height.Value.ToString()) ? decimal.Parse(slider.height.Value.ToString()) : 0;
@@ -13,31 +12,12 @@
     var heightFactor = height / editorHeight;
 
 }
-
 <div class="tp-banner-container">
     <div class="tp-banner">
         <ul>
 
             @foreach (var index in slider.slides)
             {
-                string bgposstart = "";
-                if (!string.IsNullOrEmpty(index.dataAnimateBgPositionStart.ToString()))
-                {
-                    bgposstart = "data-bgposition= '" + index.dataAnimateBgPositionStart.ToString() + "'";
-                }
-
-                string bgposend = "";
-                if (!string.IsNullOrEmpty(index.dataAnimateBgPositionEnd.ToString()))
-                {
-                    bgposend = "data-bgpositionend= '" + index.dataAnimateBgPositionEnd.ToString() + "'";
-                }
-
-                string kenburns = "off";
-                if (!string.IsNullOrEmpty(index.dataAnimateBg.ToString()))
-                {
-                    kenburns = index.dataAnimateBg == "True" ? "on" : "off";
-                }
-
 
                 <li @( !string.IsNullOrEmpty(index.dataTransition.ToString()) ? "data-transition=" + index.dataTransition : "")
                     @( !string.IsNullOrEmpty(index.dataSlotamount.ToString()) ? "data-slotamount=" + index.dataSlotamount : "")
@@ -47,14 +27,13 @@
                     <img src="@(!string.IsNullOrEmpty(index.mediaSrc.ToString()) ? index.mediaSrc : "/App_Plugins/Lecoati.uSky.Slider/assets/transparent.png")"
                          style="background-color: @index.backgroundColor"
                          data-bgrepeat="no-repeat"
-                         @* BG Animation*@
-                         data-kenburns="@kenburns"
-                         @Html.Raw(bgposstart)
-                         @Html.Raw(bgposend)
-                         @(!string.IsNullOrEmpty(index.dataAnimateBgDuration.ToString()) ? "data-duration=" + index.dataAnimateBgDuration : "")
-                         @(!string.IsNullOrEmpty(index.dataAnimateBgEase.ToString()) ? "data-ease=" + index.dataAnimateBgEase : "")
-                         @(!string.IsNullOrEmpty(index.dataAnimateBgFitStart.ToString()) ? "data-bgfit=" + index.dataAnimateBgFitStart : "")
-                         @(!string.IsNullOrEmpty(index.dataAnimateBgFitEnd.ToString()) ? "data-bgfitend=" + index.dataAnimateBgFitEnd : "") />
+                         data-kenburns="@(index.dataAnimateBg == "True" ? "on" : "off")"  
+                         data-bgposition="@(index.dataAnimateBgPositionStart)" 
+                         data-bgpositionend= "@(index.dataAnimateBgPositionEnd)"
+                         data-duration="@index.dataAnimateBgDuration" 
+                         data-ease="@index.dataAnimateBgEase" 
+                         data-bgfit="@index.dataAnimateBgFitStart" 
+                         data-bgfitend="@index.dataAnimateBgFitEnd" />
 
                     @foreach (var layer in index.layers)
                     {
